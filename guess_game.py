@@ -63,4 +63,16 @@ while True:
     again = input("Play again? (yes/no): ").lower()
     if again != "yes":
         print("Thanks for playing! 😎")
+    try:
+    with open("highscore.txt", "r") as f:
+        highscore = int(f.read())
+except:
+    highscore = 0
+
+if score > highscore:
+    with open("highscore.txt", "w") as f:
+        f.write(str(score))
+    print(f"🏆 NEW HIGH SCORE: {score}!")
+else:
+    print(f"Current high score: {highscore}")
         break
