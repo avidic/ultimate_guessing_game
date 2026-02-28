@@ -37,6 +37,12 @@ def play_game():
             print(f"💡 CHEAT ACTIVE! The number is {number}")
             continue
 
+        # Secret bonus multiplier
+        if guess.lower() == "bonus":
+            score *= 2
+            print(f"✨ BONUS ACTIVATED! Score doubled to {score}")
+            continue
+
         if not guess.isdigit():
             print("⚠️ Please enter a real number!")
             continue
@@ -46,7 +52,10 @@ def play_game():
 
         if guess == number:
             print(f"🎉 YOU WIN in {attempts} attempts!")
-            score += attempts
+            # Bonus points for remaining lives
+            bonus = max(0, lives * 2)
+            print(f"💎 Bonus points for remaining lives: {bonus}")
+            score += attempts + bonus
             break
         elif guess < number:
             print("Too low!")
