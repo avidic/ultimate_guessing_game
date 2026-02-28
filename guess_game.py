@@ -25,11 +25,17 @@ def play_game():
 
     number = random.randint(1, max_number)
     attempts = 0
+    score = 0
 
     print(f"\nI'm thinking of a number between 1 and {max_number}.")
 
     while lives > 0:
         guess = input("Take a guess: ")
+
+        # Cheat code
+        if guess.lower() == "iddqd":
+            print(f"💡 CHEAT ACTIVE! The number is {number}")
+            continue
 
         if not guess.isdigit():
             print("⚠️ Please enter a real number!")
@@ -40,7 +46,8 @@ def play_game():
 
         if guess == number:
             print(f"🎉 YOU WIN in {attempts} attempts!")
-            return attempts
+            score += attempts
+            break
         elif guess < number:
             print("Too low!")
         else:
@@ -49,30 +56,33 @@ def play_game():
         lives -= 1
         print(f"Lives left: {lives}")
 
-    print(f"💀 You lost! The number was {number}")
-    return 0
+    if lives == 0:
+        print(f"💀 You lost! The number was {number}")
 
+    # High score tracking
+    try:
+        with open("highscore.txt", "r") as f:
+            highscore = int(f.read())
+    except:
+        highscore = 0
 
-score = 0
+    if score > highscore:
+        with open("highscore.txt", "w") as f:
+            f.write(str(score))
+        print(f"🏆 NEW HIGH SCORE: {score}!")
+    else:
+        print(f"Current high score: {highscore}")
+
+    return score
+
+# Main loop
+total_score = 0
 
 while True:
-    result = play_game()
-    score += result
-    print(f"\n🏆 Your total score: {score}")
+    total_score += play_game()
+    print(f"\n🏆 Your total score: {total_score}")
 
     again = input("Play again? (yes/no): ").lower()
     if again != "yes":
         print("Thanks for playing! 😎")
-    try:
-    with open("highscore.txt", "r") as f:
-        highscore = int(f.read())
-except:
-    highscore = 0
-
-if score > highscore:
-    with open("highscore.txt", "w") as f:
-        f.write(str(score))
-    print(f"🏆 NEW HIGH SCORE: {score}!")
-else:
-    print(f"Current high score: {highscore}")
         break
